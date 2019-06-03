@@ -73,6 +73,7 @@ CREATE TABLE Mineral (
   IdElemento INTEGER, 
   tipoMineral VARCHAR(50),
   PRIMARY KEY (IdElemento),
+  FOREIGN KEY (IdElemento) REFERENCES ElementoNatural(IdElemento),
   CONSTRAINT mineral_tipos CHECK (tipoMineral = 'Roca' OR tipoMineral = 'Cristal')
 );
 INSERT INTO Mineral(IdElemento, tipoMineral) VALUES (1, 'Roca');
@@ -92,7 +93,7 @@ CREATE TABLE Vegetal (
   IdElemento INTEGER, 
   tipoVegetal VARCHAR(50),
   PRIMARY KEY (IdElemento),
-  FOREIGN KEY (IdElemento) REFERENCES ElementoNatural(IdElemento),
+  FOREIGN KEY (IdElemento) REFERENCES Comestible(IdElemento),
   CONSTRAINT vegetal_tipos CHECK (tipoVegetal = 'SinFloracion' OR tipoVegetal = 'ConFloracion')
 );
 INSERT INTO Vegetal (IdElemento, tipoVegetal) VALUES (4, 'ConFloracion');
@@ -101,7 +102,7 @@ CREATE TABLE ConFloracion (
   IdElemento INTEGER,
   periodoFloracion VARCHAR(50),
   PRIMARY KEY (IdElemento),
-  FOREIGN KEY (IdElemento) REFERENCES ElementoNatural(IdElemento)
+  FOREIGN KEY (IdElemento) REFERENCES Vegetal(IdElemento)
 );
 INSERT INTO ConFloracion(IdElemento, periodoFloracion) VALUES (4, 'fines agosto hasta mediados marzo');
 
@@ -110,7 +111,7 @@ CREATE TABLE Animal (
   tipoAlimentacion VARCHAR(50), 
   periodoCelo VARCHAR(50),
   PRIMARY KEY (IdElemento),
-  FOREIGN KEY (IdElemento) REFERENCES ElementoNatural(IdElemento),
+  FOREIGN KEY (IdElemento) REFERENCES Comestible(IdElemento),
   CONSTRAINT tipo_alimentacion CHECK (tipoAlimentacion = 'Herbivoro' OR tipoAlimentacion = 'Carnivoro' OR tipoAlimentacion = 'Omnivoro')
 );
 INSERT INTO Animal(IdElemento, tipoAlimentacion, periodoCelo) VALUES (2, 'Carnivoro', 'Anual');

@@ -151,7 +151,7 @@ INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (8, 
 INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (9, 4, 1);
 
 CREATE TABLE ElementosPerdidos (
-  IdElementoPerdido SERIAL,
+  IdElementoPerdido INTEGER,
   nombreCientifico VARCHAR(50) NOT NULL,
   nombreVulgar VARCHAR(50),
   PRIMARY KEY (IdElementoPerdido)

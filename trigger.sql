@@ -1,8 +1,9 @@
 CREATE TABLE ElementosPerdidos (
-  IdElementoPerdido INTEGER,
+  IdPerdida SERIAL,
+  IdElementoPerdido INTEGER NOT NULL,
   nombreCientifico VARCHAR(50) NOT NULL,
   nombreVulgar VARCHAR(50),
-  PRIMARY KEY (IdElementoPerdido)
+  PRIMARY KEY (IdPerdida)
 );
 
 CREATE OR REPLACE FUNCTION perdida_elemento() RETURNS TRIGGER AS $$

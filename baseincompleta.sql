@@ -126,3 +126,58 @@ CREATE TABLE SeAlimentaDe (
 );
 INSERT INTO SeAlimentaDe(IdDepredador, IdPresa) VALUES (2, 3);
 INSERT INTO SeAlimentaDe(IdDepredador, IdPresa) VALUES (3, 4);
+
+-- SELECT depredador.nombreVulgar AS depredador, presa.nombreVulgar AS presa
+-- FROM SeAlimentaDe
+-- JOIN ElementoNatural depredador ON depredador.IdElemento = SeAlimentaDe.IdDepredador
+-- JOIN ElementoNatural presa ON presa.IdElemento = SeAlimentaDe.IdPresa;
+
+CREATE TABLE RegistroElemento (
+  IdRegistroElemento INTEGER,
+  IdElemento INTEGER,
+  IdArea INTEGER,
+  PRIMARY KEY (IdRegistroElemento),
+  FOREIGN KEY (IdElemento) REFERENCES ElementoNatural(IdElemento),
+  FOREIGN KEY (IdArea) REFERENCES Area(IdArea)
+);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (1, 1, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (2, 2, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (3, 3, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (4, 3, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (5, 3, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (6, 4, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (7, 4, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (8, 4, 1);
+INSERT INTO RegistroElemento(IdRegistroElemento, IdElemento, IdArea) VALUES (9, 4, 1);
+
+CREATE TABLE ElementosPerdidos (
+  IdElementoPerdido SERIAL,
+  nombreCientifico VARCHAR(50) NOT NULL,
+  nombreVulgar VARCHAR(50),
+  PRIMARY KEY (IdElementoPerdido)
+);
+
+CREATE OR REPLACE FUNCTION perdida_elemento() RETURNS TRIGGER AS $$
+DECLARE
+  nombreCientifico VARCHAR(50);
+  nombreVulgar VARCHAR(50);
+  id INTEGER;
+BEGIN
+  SELECT INTO id, nombreCientifico, nombreVulgar
+  OLD.IdRegistroElemento, ElementoNatural.nombreCientifico, ElementoNatural.nombreVulgar
+  FROM ElementoNatural 
+  WHERE ElementoNatural.IdElemento = OLD.IdElemento;
+  
+  INSERT INTO ElementosPerdidos(IdElementoPerdido, nombreCientifico, nombreVulgar) 
+  VALUES (id, nombreCientifico, nombreVulgar);
+  
+  perform pg_notify('perdida_elemento', CONCAT(nombreCientifico, ' (id=',id,')'));
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_perdida_elemento 
+BEFORE DELETE 
+ON RegistroElemento 
+FOR EACH ROW 
+EXECUTE PROCEDURE perdida_elemento();

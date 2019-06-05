@@ -32,15 +32,29 @@ EMAIL_RECEIVER="receiver@hotmail.com"
 dbc = psycopg2.connect(database=DB_NAME, host=DB_HOST, user=DB_USER, password=DB_PASSWORD)
 dbc.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 cur = dbc.cursor()
-cur.execute('LISTEN perdida_elemento')
+
+def mostrarYenviarEmail(row):
+  IdElementoPerdido = row[0]
+  nombreCientifico = row[1]
+  IdPerdida = row[2]
+  msg = "Se perdio un especimen de la siguiente especie: %s (id=%s)" % (nombreCientifico, IdElementoPerdido)
+  print(msg)
+  server = smtplib.SMTP("localhost", PORT)
+  server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, "\n" + msg)
+  server.quit()
+  cur.execute("UPDATE UltimoEmailEnviado SET ultimoId=%s where id=1;", [IdPerdida])
+
+cur.execute("LISTEN perdida_elemento;")
+cur.execute("SELECT IdElementoPerdido, nombreCientifico, IdPerdida FROM ElementosPerdidos WHERE IdPerdida > (SELECT ultimoid FROM UltimoEmailEnviado);")
+results = cur.fetchall()
+for row in results:
+  mostrarYenviarEmail(row)
  
 while 1:
   if not select.select([dbc], [], [], 5) == ([], [], []):
     dbc.poll()
     while dbc.notifies:
       notify = dbc.notifies.pop()
-      msg = "Se perdio un especimen de la siguiente especie: %s" % (notify.payload)
-      print(msg)
-      server = smtplib.SMTP("localhost", PORT)
-      server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, "\n" + msg)
-      server.quit()
+      cur.execute("SELECT IdElementoPerdido, nombreCientifico, IdPerdida FROM ElementosPerdidos WHERE IdPerdida = %s;", [notify.payload])
+      row = cur.fetchone()
+      mostrarYenviarEmail(row)

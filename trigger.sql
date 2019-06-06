@@ -1,11 +1,11 @@
 CREATE TABLE ElementosPerdidos (
-  IdPerdida SERIAL,
+  IdPerdida SERIAL NOT NULL,
   IdRegistroElemento INTEGER NOT NULL,
-  IdElemento INTEGER,
-  IdArea INTEGER,
+  IdElemento INTEGER NOT NULL,
+  IdArea INTEGER NOT NULL,
   EmailEnviado BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (IdPerdida),
-  FOREIGN KEY (IdElemento) REFERENCES RegistroElemento(IdRegistroElemento),
+  FOREIGN KEY (IdElemento) REFERENCES ElementoNatural(IdElemento),
   FOREIGN KEY (IdArea) REFERENCES Area(IdArea)
 );
 
@@ -16,8 +16,6 @@ DECLARE
   IdArea INTEGER;
   IdPerdida INTEGER;
 BEGIN
-  -- SELECT OLD.IdRegistroElemento, OLD.IdElemento, OLD.IdArea
-  -- INTO IdRegistroElemento, IdElemento, IdArea;
   IdRegistroElemento := OLD.IdRegistroElemento;
   IdElemento := OLD.IdElemento;
   IdArea := OLD.IdArea;

@@ -1,31 +1,29 @@
 CREATE TABLE ElementosPerdidos (
   IdPerdida SERIAL,
-  IdElementoPerdido INTEGER NOT NULL,
-  nombreCientifico VARCHAR(50) NOT NULL,
-  nombreVulgar VARCHAR(50),
-  PRIMARY KEY (IdPerdida)
-);
-
-CREATE TABLE UltimoEmailEnviado (
-  id INTEGER PRIMARY KEY DEFAULT 1,
-  ultimoId INTEGER NOT NULL DEFAULT 1,
-  CONSTRAINT unaFila CHECK (id = 1)
+  IdRegistroElemento INTEGER NOT NULL,
+  IdElemento INTEGER,
+  IdArea INTEGER,
+  EmailEnviado BOOLEAN NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (IdPerdida),
+  FOREIGN KEY (IdElemento) REFERENCES RegistroElemento(IdRegistroElemento),
+  FOREIGN KEY (IdArea) REFERENCES Area(IdArea)
 );
 
 CREATE OR REPLACE FUNCTION perdida_elemento() RETURNS TRIGGER AS $$
 DECLARE
-  nombreCientifico VARCHAR(50);
-  nombreVulgar VARCHAR(50);
   IdRegistroElemento INTEGER;
+  IdElemento INTEGER;
+  IdArea INTEGER;
   IdPerdida INTEGER;
 BEGIN
-  SELECT INTO IdRegistroElemento, nombreCientifico, nombreVulgar
-  OLD.IdRegistroElemento, ElementoNatural.nombreCientifico, ElementoNatural.nombreVulgar
-  FROM ElementoNatural 
-  WHERE ElementoNatural.IdElemento = OLD.IdElemento;
+  -- SELECT OLD.IdRegistroElemento, OLD.IdElemento, OLD.IdArea
+  -- INTO IdRegistroElemento, IdElemento, IdArea;
+  IdRegistroElemento := OLD.IdRegistroElemento;
+  IdElemento := OLD.IdElemento;
+  IdArea := OLD.IdArea;
   
-  INSERT INTO ElementosPerdidos(IdElementoPerdido, nombreCientifico, nombreVulgar) 
-  VALUES (IdRegistroElemento, nombreCientifico, nombreVulgar)
+  INSERT INTO ElementosPerdidos(IdRegistroElemento, IdElemento, IdArea) 
+  VALUES (IdRegistroElemento, IdElemento, IdArea)
   RETURNING ElementosPerdidos.IdPerdida INTO IdPerdida;
   
   perform pg_notify('perdida_elemento', IdPerdida::TEXT);

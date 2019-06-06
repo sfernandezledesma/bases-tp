@@ -33,28 +33,28 @@ dbc = psycopg2.connect(database=DB_NAME, host=DB_HOST, user=DB_USER, password=DB
 dbc.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 cur = dbc.cursor()
 
-def mostrarYenviarEmail(row):
-  IdElementoPerdido = row[0]
+def mostrar_y_enviar_email(row):
+  IdRegistroElemento = row[0]
   nombreCientifico = row[1]
   IdPerdida = row[2]
-  msg = "Se perdio un especimen de la siguiente especie: %s (id=%s)" % (nombreCientifico, IdElementoPerdido)
+  msg = "Se perdio un especimen de la siguiente especie: %s (id=%s)" % (nombreCientifico, IdRegistroElemento)
   print(msg)
   server = smtplib.SMTP("localhost", PORT)
   server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, "\n" + msg)
   server.quit()
-  cur.execute("UPDATE UltimoEmailEnviado SET ultimoId=%s where id=1;", [IdPerdida])
+  cur.execute("UPDATE ElementosPerdidos SET EmailEnviado=TRUE WHERE IdPerdida=%s;", [IdPerdida])
 
 cur.execute("LISTEN perdida_elemento;")
-cur.execute("SELECT IdElementoPerdido, nombreCientifico, IdPerdida FROM ElementosPerdidos WHERE IdPerdida > (SELECT ultimoid FROM UltimoEmailEnviado);")
+cur.execute("SELECT IdRegistroElemento, nombreCientifico, IdPerdida FROM ElementosPerdidos NATURAL JOIN ElementoNatural WHERE NOT EmailEnviado;")
 results = cur.fetchall()
 for row in results:
-  mostrarYenviarEmail(row)
+  mostrar_y_enviar_email(row)
  
 while 1:
   if not select.select([dbc], [], [], 5) == ([], [], []):
     dbc.poll()
     while dbc.notifies:
       notify = dbc.notifies.pop()
-      cur.execute("SELECT IdElementoPerdido, nombreCientifico, IdPerdida FROM ElementosPerdidos WHERE IdPerdida = %s;", [notify.payload])
+      cur.execute("SELECT IdRegistroElemento, nombreCientifico, IdPerdida FROM ElementosPerdidos NATURAL JOIN ElementoNatural WHERE IdPerdida = %s;", [notify.payload])
       row = cur.fetchone()
-      mostrarYenviarEmail(row)
+      mostrar_y_enviar_email(row)

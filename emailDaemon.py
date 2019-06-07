@@ -18,7 +18,7 @@ import select
 import psycopg2
 import psycopg2.extensions
 from dotenv import load_dotenv
-import smtplib, ssl
+import smtplib
 
 load_dotenv()
 PORT=1025
@@ -27,7 +27,6 @@ DB_HOST=os.getenv("DB_HOST")
 DB_USER=os.getenv("DB_USER")
 DB_PASSWORD=os.getenv("DB_PASSWORD")
 EMAIL_SENDER="admin@gmail.com"
-EMAIL_RECEIVER="receiver@hotmail.com"
 
 dbc = psycopg2.connect(database=DB_NAME, host=DB_HOST, user=DB_USER, password=DB_PASSWORD)
 dbc.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
@@ -45,7 +44,7 @@ Subject: Notificacion Perdida Especimen
 Se perdio un especimen de la siguiente especie: %s (id=%s)""" % (EMAIL_SENDER, EmailContacto, nombreCientifico, IdRegistroElemento)
   print(msg)
   server = smtplib.SMTP("localhost", PORT)
-  server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, "\n" + msg)
+  server.sendmail(EMAIL_SENDER, EmailContacto, "\n" + msg)
   server.quit()
   cur.execute("UPDATE ElementosPerdidos SET EmailEnviado=TRUE WHERE IdPerdida=%s;", [IdPerdida])
 

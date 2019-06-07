@@ -5,7 +5,7 @@
 -- Dumped from database version 11.3 (Debian 11.3-1.pgdg100+1)
 -- Dumped by pg_dump version 11.3 (Debian 11.3-1.pgdg100+1)
 
--- Started on 2019-06-06 15:35:46 -03
+-- Started on 2019-06-07 00:02:57 -03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 231 (class 1255 OID 26871)
+-- TOC entry 231 (class 1255 OID 27314)
 -- Name: perdida_elemento(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -27,17 +27,10 @@ CREATE FUNCTION public.perdida_elemento() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
-  IdRegistroElemento INTEGER;
-  IdElemento INTEGER;
-  IdArea INTEGER;
   IdPerdida INTEGER;
 BEGIN
-  IdRegistroElemento := OLD.IdRegistroElemento;
-  IdElemento := OLD.IdElemento;
-  IdArea := OLD.IdArea;
-  
   INSERT INTO ElementosPerdidos(IdRegistroElemento, IdElemento, IdArea) 
-  VALUES (IdRegistroElemento, IdElemento, IdArea)
+  VALUES (OLD.IdRegistroElemento, OLD.IdElemento, OLD.IdArea)
   RETURNING ElementosPerdidos.IdPerdida INTO IdPerdida;
   
   perform pg_notify('perdida_elemento', IdPerdida::TEXT);
@@ -51,7 +44,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 196 (class 1259 OID 26872)
+-- TOC entry 196 (class 1259 OID 27315)
 -- Name: alojamiento; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -64,7 +57,7 @@ CREATE TABLE public.alojamiento (
 
 
 --
--- TOC entry 197 (class 1259 OID 26875)
+-- TOC entry 197 (class 1259 OID 27318)
 -- Name: animal; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -76,7 +69,7 @@ CREATE TABLE public.animal (
 
 
 --
--- TOC entry 198 (class 1259 OID 26881)
+-- TOC entry 198 (class 1259 OID 27324)
 -- Name: area; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -89,7 +82,7 @@ CREATE TABLE public.area (
 
 
 --
--- TOC entry 199 (class 1259 OID 26887)
+-- TOC entry 199 (class 1259 OID 27330)
 -- Name: comestible; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -100,7 +93,7 @@ CREATE TABLE public.comestible (
 
 
 --
--- TOC entry 200 (class 1259 OID 26893)
+-- TOC entry 200 (class 1259 OID 27336)
 -- Name: confloracion; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -111,7 +104,7 @@ CREATE TABLE public.confloracion (
 
 
 --
--- TOC entry 201 (class 1259 OID 26899)
+-- TOC entry 201 (class 1259 OID 27342)
 -- Name: conservacion; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -123,7 +116,7 @@ CREATE TABLE public.conservacion (
 
 
 --
--- TOC entry 202 (class 1259 OID 26905)
+-- TOC entry 202 (class 1259 OID 27348)
 -- Name: contiene; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -134,7 +127,7 @@ CREATE TABLE public.contiene (
 
 
 --
--- TOC entry 203 (class 1259 OID 26908)
+-- TOC entry 203 (class 1259 OID 27351)
 -- Name: elementonatural; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -147,7 +140,7 @@ CREATE TABLE public.elementonatural (
 
 
 --
--- TOC entry 230 (class 1259 OID 27296)
+-- TOC entry 204 (class 1259 OID 27357)
 -- Name: elementosperdidos; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -161,7 +154,7 @@ CREATE TABLE public.elementosperdidos (
 
 
 --
--- TOC entry 229 (class 1259 OID 27294)
+-- TOC entry 205 (class 1259 OID 27361)
 -- Name: elementosperdidos_idperdida_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -176,7 +169,7 @@ CREATE SEQUENCE public.elementosperdidos_idperdida_seq
 
 --
 -- TOC entry 3197 (class 0 OID 0)
--- Dependencies: 229
+-- Dependencies: 205
 -- Name: elementosperdidos_idperdida_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
@@ -184,7 +177,7 @@ ALTER SEQUENCE public.elementosperdidos_idperdida_seq OWNED BY public.elementosp
 
 
 --
--- TOC entry 204 (class 1259 OID 26920)
+-- TOC entry 206 (class 1259 OID 27363)
 -- Name: estadia; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -195,7 +188,7 @@ CREATE TABLE public.estadia (
 
 
 --
--- TOC entry 205 (class 1259 OID 26923)
+-- TOC entry 207 (class 1259 OID 27366)
 -- Name: excursion; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -207,7 +200,7 @@ CREATE TABLE public.excursion (
 
 
 --
--- TOC entry 206 (class 1259 OID 26926)
+-- TOC entry 208 (class 1259 OID 27369)
 -- Name: gestion; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -218,7 +211,7 @@ CREATE TABLE public.gestion (
 
 
 --
--- TOC entry 207 (class 1259 OID 26929)
+-- TOC entry 209 (class 1259 OID 27372)
 -- Name: investiga; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -229,7 +222,7 @@ CREATE TABLE public.investiga (
 
 
 --
--- TOC entry 208 (class 1259 OID 26932)
+-- TOC entry 210 (class 1259 OID 27375)
 -- Name: investigador; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -240,7 +233,7 @@ CREATE TABLE public.investigador (
 
 
 --
--- TOC entry 209 (class 1259 OID 26938)
+-- TOC entry 211 (class 1259 OID 27381)
 -- Name: mineral; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -251,7 +244,7 @@ CREATE TABLE public.mineral (
 
 
 --
--- TOC entry 210 (class 1259 OID 26944)
+-- TOC entry 212 (class 1259 OID 27387)
 -- Name: ocupadopor; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -263,7 +256,7 @@ CREATE TABLE public.ocupadopor (
 
 
 --
--- TOC entry 211 (class 1259 OID 26947)
+-- TOC entry 213 (class 1259 OID 27390)
 -- Name: ofrece; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -274,7 +267,7 @@ CREATE TABLE public.ofrece (
 
 
 --
--- TOC entry 212 (class 1259 OID 26950)
+-- TOC entry 214 (class 1259 OID 27393)
 -- Name: organismo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -285,7 +278,7 @@ CREATE TABLE public.organismo (
 
 
 --
--- TOC entry 213 (class 1259 OID 26956)
+-- TOC entry 215 (class 1259 OID 27399)
 -- Name: parque; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -298,7 +291,7 @@ CREATE TABLE public.parque (
 
 
 --
--- TOC entry 214 (class 1259 OID 26962)
+-- TOC entry 216 (class 1259 OID 27405)
 -- Name: participade; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -311,7 +304,7 @@ CREATE TABLE public.participade (
 
 
 --
--- TOC entry 215 (class 1259 OID 26965)
+-- TOC entry 217 (class 1259 OID 27408)
 -- Name: personal; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -328,7 +321,7 @@ CREATE TABLE public.personal (
 
 
 --
--- TOC entry 216 (class 1259 OID 26971)
+-- TOC entry 218 (class 1259 OID 27414)
 -- Name: propuestadeexcursion; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -340,7 +333,7 @@ CREATE TABLE public.propuestadeexcursion (
 
 
 --
--- TOC entry 217 (class 1259 OID 26977)
+-- TOC entry 219 (class 1259 OID 27420)
 -- Name: propuestadias; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -351,7 +344,7 @@ CREATE TABLE public.propuestadias (
 
 
 --
--- TOC entry 218 (class 1259 OID 26983)
+-- TOC entry 220 (class 1259 OID 27426)
 -- Name: propuestahoras; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -362,7 +355,7 @@ CREATE TABLE public.propuestahoras (
 
 
 --
--- TOC entry 219 (class 1259 OID 26986)
+-- TOC entry 221 (class 1259 OID 27429)
 -- Name: provincia; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -374,7 +367,7 @@ CREATE TABLE public.provincia (
 
 
 --
--- TOC entry 220 (class 1259 OID 26992)
+-- TOC entry 222 (class 1259 OID 27435)
 -- Name: provincia_cantparques; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -386,7 +379,7 @@ SELECT
 
 
 --
--- TOC entry 221 (class 1259 OID 26996)
+-- TOC entry 223 (class 1259 OID 27439)
 -- Name: proyecto; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -399,7 +392,7 @@ CREATE TABLE public.proyecto (
 
 
 --
--- TOC entry 222 (class 1259 OID 27002)
+-- TOC entry 224 (class 1259 OID 27445)
 -- Name: recorrido; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -412,7 +405,7 @@ CREATE TABLE public.recorrido (
 
 
 --
--- TOC entry 223 (class 1259 OID 27008)
+-- TOC entry 225 (class 1259 OID 27451)
 -- Name: registroelemento; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -424,7 +417,7 @@ CREATE TABLE public.registroelemento (
 
 
 --
--- TOC entry 224 (class 1259 OID 27011)
+-- TOC entry 226 (class 1259 OID 27454)
 -- Name: sealimentade; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -435,7 +428,7 @@ CREATE TABLE public.sealimentade (
 
 
 --
--- TOC entry 225 (class 1259 OID 27014)
+-- TOC entry 227 (class 1259 OID 27457)
 -- Name: trabajaen; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -447,7 +440,7 @@ CREATE TABLE public.trabajaen (
 
 
 --
--- TOC entry 226 (class 1259 OID 27017)
+-- TOC entry 228 (class 1259 OID 27460)
 -- Name: vegetal; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -458,7 +451,7 @@ CREATE TABLE public.vegetal (
 
 
 --
--- TOC entry 227 (class 1259 OID 27023)
+-- TOC entry 229 (class 1259 OID 27466)
 -- Name: vehiculo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -469,7 +462,7 @@ CREATE TABLE public.vehiculo (
 
 
 --
--- TOC entry 228 (class 1259 OID 27029)
+-- TOC entry 230 (class 1259 OID 27472)
 -- Name: visitante; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -483,7 +476,7 @@ CREATE TABLE public.visitante (
 
 
 --
--- TOC entry 2929 (class 2604 OID 27299)
+-- TOC entry 2930 (class 2604 OID 27478)
 -- Name: elementosperdidos idperdida; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -491,7 +484,7 @@ ALTER TABLE ONLY public.elementosperdidos ALTER COLUMN idperdida SET DEFAULT nex
 
 
 --
--- TOC entry 3158 (class 0 OID 26872)
+-- TOC entry 3158 (class 0 OID 27315)
 -- Dependencies: 196
 -- Data for Name: alojamiento; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -521,7 +514,7 @@ COPY public.alojamiento (idalojamiento, capacidad, categoria, idparque) FROM std
 
 
 --
--- TOC entry 3159 (class 0 OID 26875)
+-- TOC entry 3159 (class 0 OID 27318)
 -- Dependencies: 197
 -- Data for Name: animal; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -535,7 +528,7 @@ COPY public.animal (idelemento, tipoalimentacion, periodocelo) FROM stdin;
 
 
 --
--- TOC entry 3160 (class 0 OID 26881)
+-- TOC entry 3160 (class 0 OID 27324)
 -- Dependencies: 198
 -- Data for Name: area; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -563,7 +556,7 @@ COPY public.area (idarea, nombre, superficie, idparque) FROM stdin;
 
 
 --
--- TOC entry 3161 (class 0 OID 26887)
+-- TOC entry 3161 (class 0 OID 27330)
 -- Dependencies: 199
 -- Data for Name: comestible; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -588,7 +581,7 @@ COPY public.comestible (idelemento, tipocomestible) FROM stdin;
 
 
 --
--- TOC entry 3162 (class 0 OID 26893)
+-- TOC entry 3162 (class 0 OID 27336)
 -- Dependencies: 200
 -- Data for Name: confloracion; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -603,7 +596,7 @@ COPY public.confloracion (idelemento, periodofloracion) FROM stdin;
 
 
 --
--- TOC entry 3163 (class 0 OID 26899)
+-- TOC entry 3163 (class 0 OID 27342)
 -- Dependencies: 201
 -- Data for Name: conservacion; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -613,7 +606,7 @@ COPY public.conservacion (idpersonal, especializacion, idarea) FROM stdin;
 
 
 --
--- TOC entry 3164 (class 0 OID 26905)
+-- TOC entry 3164 (class 0 OID 27348)
 -- Dependencies: 202
 -- Data for Name: contiene; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -632,7 +625,7 @@ COPY public.contiene (idprovincia, idparque) FROM stdin;
 
 
 --
--- TOC entry 3165 (class 0 OID 26908)
+-- TOC entry 3165 (class 0 OID 27351)
 -- Dependencies: 203
 -- Data for Name: elementonatural; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -660,8 +653,8 @@ COPY public.elementonatural (idelemento, nombrecientifico, nombrevulgar, tipoele
 
 
 --
--- TOC entry 3191 (class 0 OID 27296)
--- Dependencies: 230
+-- TOC entry 3166 (class 0 OID 27357)
+-- Dependencies: 204
 -- Data for Name: elementosperdidos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -669,12 +662,17 @@ COPY public.elementosperdidos (idperdida, idregistroelemento, idelemento, idarea
 1	100	1	1	t
 2	200	2	2	t
 3	300	3	3	t
+4	400	4	4	t
+5	500	5	5	t
+6	600	6	6	t
+7	700	7	7	t
+8	800	8	8	t
 \.
 
 
 --
--- TOC entry 3166 (class 0 OID 26920)
--- Dependencies: 204
+-- TOC entry 3168 (class 0 OID 27363)
+-- Dependencies: 206
 -- Data for Name: estadia; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -706,8 +704,8 @@ COPY public.estadia (idalojamiento, fecha) FROM stdin;
 
 
 --
--- TOC entry 3167 (class 0 OID 26923)
--- Dependencies: 205
+-- TOC entry 3169 (class 0 OID 27366)
+-- Dependencies: 207
 -- Data for Name: excursion; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -716,8 +714,8 @@ COPY public.excursion (idpropuesta, fecha, hora) FROM stdin;
 
 
 --
--- TOC entry 3168 (class 0 OID 26926)
--- Dependencies: 206
+-- TOC entry 3170 (class 0 OID 27369)
+-- Dependencies: 208
 -- Data for Name: gestion; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -726,8 +724,8 @@ COPY public.gestion (idpersonal, numeroentrada) FROM stdin;
 
 
 --
--- TOC entry 3169 (class 0 OID 26929)
--- Dependencies: 207
+-- TOC entry 3171 (class 0 OID 27372)
+-- Dependencies: 209
 -- Data for Name: investiga; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -736,8 +734,8 @@ COPY public.investiga (idinvestigador, idproyecto) FROM stdin;
 
 
 --
--- TOC entry 3170 (class 0 OID 26932)
--- Dependencies: 208
+-- TOC entry 3172 (class 0 OID 27375)
+-- Dependencies: 210
 -- Data for Name: investigador; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -746,8 +744,8 @@ COPY public.investigador (idpersonal, titulacion) FROM stdin;
 
 
 --
--- TOC entry 3171 (class 0 OID 26938)
--- Dependencies: 209
+-- TOC entry 3173 (class 0 OID 27381)
+-- Dependencies: 211
 -- Data for Name: mineral; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -759,8 +757,8 @@ COPY public.mineral (idelemento, tipomineral) FROM stdin;
 
 
 --
--- TOC entry 3172 (class 0 OID 26944)
--- Dependencies: 210
+-- TOC entry 3174 (class 0 OID 27387)
+-- Dependencies: 212
 -- Data for Name: ocupadopor; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -778,8 +776,8 @@ COPY public.ocupadopor (idalojamiento, fechaestadia, idvisitante) FROM stdin;
 
 
 --
--- TOC entry 3173 (class 0 OID 26947)
--- Dependencies: 211
+-- TOC entry 3175 (class 0 OID 27390)
+-- Dependencies: 213
 -- Data for Name: ofrece; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -788,8 +786,8 @@ COPY public.ofrece (idalojamiento, idpropuesta) FROM stdin;
 
 
 --
--- TOC entry 3174 (class 0 OID 26950)
--- Dependencies: 212
+-- TOC entry 3176 (class 0 OID 27393)
+-- Dependencies: 214
 -- Data for Name: organismo; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -804,8 +802,8 @@ COPY public.organismo (idorganismo, nombre) FROM stdin;
 
 
 --
--- TOC entry 3175 (class 0 OID 26956)
--- Dependencies: 213
+-- TOC entry 3177 (class 0 OID 27399)
+-- Dependencies: 215
 -- Data for Name: parque; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -822,8 +820,8 @@ COPY public.parque (idparque, nombre, fechadeclaracion, emailcontacto) FROM stdi
 
 
 --
--- TOC entry 3176 (class 0 OID 26962)
--- Dependencies: 214
+-- TOC entry 3178 (class 0 OID 27405)
+-- Dependencies: 216
 -- Data for Name: participade; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -832,8 +830,8 @@ COPY public.participade (idvisitante, idpropuesta, fechapropuesta, horapropuesta
 
 
 --
--- TOC entry 3177 (class 0 OID 26965)
--- Dependencies: 215
+-- TOC entry 3179 (class 0 OID 27408)
+-- Dependencies: 217
 -- Data for Name: personal; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -842,8 +840,8 @@ COPY public.personal (idpersonal, tipopersonal, nombre, direccion, telefonomovil
 
 
 --
--- TOC entry 3178 (class 0 OID 26971)
--- Dependencies: 216
+-- TOC entry 3180 (class 0 OID 27414)
+-- Dependencies: 218
 -- Data for Name: propuestadeexcursion; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -852,8 +850,8 @@ COPY public.propuestadeexcursion (idpropuesta, mobilidad, descripcion) FROM stdi
 
 
 --
--- TOC entry 3179 (class 0 OID 26977)
--- Dependencies: 217
+-- TOC entry 3181 (class 0 OID 27420)
+-- Dependencies: 219
 -- Data for Name: propuestadias; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -862,8 +860,8 @@ COPY public.propuestadias (idpropuesta, dia) FROM stdin;
 
 
 --
--- TOC entry 3180 (class 0 OID 26983)
--- Dependencies: 218
+-- TOC entry 3182 (class 0 OID 27426)
+-- Dependencies: 220
 -- Data for Name: propuestahoras; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -872,8 +870,8 @@ COPY public.propuestahoras (idpropuesta, hora) FROM stdin;
 
 
 --
--- TOC entry 3181 (class 0 OID 26986)
--- Dependencies: 219
+-- TOC entry 3183 (class 0 OID 27429)
+-- Dependencies: 221
 -- Data for Name: provincia; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -888,8 +886,8 @@ COPY public.provincia (idprovincia, nombre, idorganismo) FROM stdin;
 
 
 --
--- TOC entry 3182 (class 0 OID 26996)
--- Dependencies: 221
+-- TOC entry 3184 (class 0 OID 27439)
+-- Dependencies: 223
 -- Data for Name: proyecto; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -898,8 +896,8 @@ COPY public.proyecto (idproyecto, presupuesto, periodo, idelementonatural) FROM 
 
 
 --
--- TOC entry 3183 (class 0 OID 27002)
--- Dependencies: 222
+-- TOC entry 3185 (class 0 OID 27445)
+-- Dependencies: 224
 -- Data for Name: recorrido; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -908,8 +906,8 @@ COPY public.recorrido (idrecorrido, idpersonalvigilancia, idarea, matriculavehic
 
 
 --
--- TOC entry 3184 (class 0 OID 27008)
--- Dependencies: 223
+-- TOC entry 3186 (class 0 OID 27451)
+-- Dependencies: 225
 -- Data for Name: registroelemento; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -936,8 +934,8 @@ COPY public.registroelemento (idregistroelemento, idelemento, idarea) FROM stdin
 
 
 --
--- TOC entry 3185 (class 0 OID 27011)
--- Dependencies: 224
+-- TOC entry 3187 (class 0 OID 27454)
+-- Dependencies: 226
 -- Data for Name: sealimentade; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -946,8 +944,8 @@ COPY public.sealimentade (iddepredador, idpresa) FROM stdin;
 
 
 --
--- TOC entry 3186 (class 0 OID 27014)
--- Dependencies: 225
+-- TOC entry 3188 (class 0 OID 27457)
+-- Dependencies: 227
 -- Data for Name: trabajaen; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -956,8 +954,8 @@ COPY public.trabajaen (idpersonal, idparque, sueldo) FROM stdin;
 
 
 --
--- TOC entry 3187 (class 0 OID 27017)
--- Dependencies: 226
+-- TOC entry 3189 (class 0 OID 27460)
+-- Dependencies: 228
 -- Data for Name: vegetal; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -977,8 +975,8 @@ COPY public.vegetal (idelemento, tipovegetal) FROM stdin;
 
 
 --
--- TOC entry 3188 (class 0 OID 27023)
--- Dependencies: 227
+-- TOC entry 3190 (class 0 OID 27466)
+-- Dependencies: 229
 -- Data for Name: vehiculo; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -987,8 +985,8 @@ COPY public.vehiculo (matricula, tipo) FROM stdin;
 
 
 --
--- TOC entry 3189 (class 0 OID 27029)
--- Dependencies: 228
+-- TOC entry 3191 (class 0 OID 27472)
+-- Dependencies: 230
 -- Data for Name: visitante; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -1008,15 +1006,15 @@ COPY public.visitante (idvisitante, nombre, domicilio, profesion, dni) FROM stdi
 
 --
 -- TOC entry 3198 (class 0 OID 0)
--- Dependencies: 229
+-- Dependencies: 205
 -- Name: elementosperdidos_idperdida_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.elementosperdidos_idperdida_seq', 3, true);
+SELECT pg_catalog.setval('public.elementosperdidos_idperdida_seq', 8, true);
 
 
 --
--- TOC entry 2932 (class 2606 OID 27037)
+-- TOC entry 2932 (class 2606 OID 27480)
 -- Name: alojamiento alojamiento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1025,7 +1023,7 @@ ALTER TABLE ONLY public.alojamiento
 
 
 --
--- TOC entry 2934 (class 2606 OID 27039)
+-- TOC entry 2934 (class 2606 OID 27482)
 -- Name: animal animal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1034,7 +1032,7 @@ ALTER TABLE ONLY public.animal
 
 
 --
--- TOC entry 2936 (class 2606 OID 27041)
+-- TOC entry 2936 (class 2606 OID 27484)
 -- Name: area area_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1043,7 +1041,7 @@ ALTER TABLE ONLY public.area
 
 
 --
--- TOC entry 2938 (class 2606 OID 27043)
+-- TOC entry 2938 (class 2606 OID 27486)
 -- Name: comestible comestible_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1052,7 +1050,7 @@ ALTER TABLE ONLY public.comestible
 
 
 --
--- TOC entry 2940 (class 2606 OID 27045)
+-- TOC entry 2940 (class 2606 OID 27488)
 -- Name: confloracion confloracion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1061,7 +1059,7 @@ ALTER TABLE ONLY public.confloracion
 
 
 --
--- TOC entry 2942 (class 2606 OID 27047)
+-- TOC entry 2942 (class 2606 OID 27490)
 -- Name: conservacion conservacion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1070,7 +1068,7 @@ ALTER TABLE ONLY public.conservacion
 
 
 --
--- TOC entry 2944 (class 2606 OID 27049)
+-- TOC entry 2944 (class 2606 OID 27492)
 -- Name: contiene contiene_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1079,7 +1077,7 @@ ALTER TABLE ONLY public.contiene
 
 
 --
--- TOC entry 2946 (class 2606 OID 27051)
+-- TOC entry 2946 (class 2606 OID 27494)
 -- Name: elementonatural elementonatural_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1088,7 +1086,7 @@ ALTER TABLE ONLY public.elementonatural
 
 
 --
--- TOC entry 2996 (class 2606 OID 27302)
+-- TOC entry 2948 (class 2606 OID 27496)
 -- Name: elementosperdidos elementosperdidos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1097,7 +1095,7 @@ ALTER TABLE ONLY public.elementosperdidos
 
 
 --
--- TOC entry 2948 (class 2606 OID 27055)
+-- TOC entry 2950 (class 2606 OID 27498)
 -- Name: estadia estadia_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1106,7 +1104,7 @@ ALTER TABLE ONLY public.estadia
 
 
 --
--- TOC entry 2950 (class 2606 OID 27057)
+-- TOC entry 2952 (class 2606 OID 27500)
 -- Name: excursion excursion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1115,7 +1113,7 @@ ALTER TABLE ONLY public.excursion
 
 
 --
--- TOC entry 2952 (class 2606 OID 27059)
+-- TOC entry 2954 (class 2606 OID 27502)
 -- Name: gestion gestion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1124,7 +1122,7 @@ ALTER TABLE ONLY public.gestion
 
 
 --
--- TOC entry 2954 (class 2606 OID 27062)
+-- TOC entry 2956 (class 2606 OID 27504)
 -- Name: investiga investiga_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1133,7 +1131,7 @@ ALTER TABLE ONLY public.investiga
 
 
 --
--- TOC entry 2956 (class 2606 OID 27064)
+-- TOC entry 2958 (class 2606 OID 27506)
 -- Name: investigador investigador_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1142,7 +1140,7 @@ ALTER TABLE ONLY public.investigador
 
 
 --
--- TOC entry 2958 (class 2606 OID 27066)
+-- TOC entry 2960 (class 2606 OID 27508)
 -- Name: mineral mineral_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1151,7 +1149,7 @@ ALTER TABLE ONLY public.mineral
 
 
 --
--- TOC entry 2960 (class 2606 OID 27068)
+-- TOC entry 2962 (class 2606 OID 27510)
 -- Name: ocupadopor ocupado_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1160,7 +1158,7 @@ ALTER TABLE ONLY public.ocupadopor
 
 
 --
--- TOC entry 2962 (class 2606 OID 27070)
+-- TOC entry 2964 (class 2606 OID 27512)
 -- Name: ofrece ofrece_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1169,7 +1167,7 @@ ALTER TABLE ONLY public.ofrece
 
 
 --
--- TOC entry 2964 (class 2606 OID 27072)
+-- TOC entry 2966 (class 2606 OID 27514)
 -- Name: organismo organismo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1178,7 +1176,7 @@ ALTER TABLE ONLY public.organismo
 
 
 --
--- TOC entry 2966 (class 2606 OID 27074)
+-- TOC entry 2968 (class 2606 OID 27516)
 -- Name: parque parque_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1187,7 +1185,7 @@ ALTER TABLE ONLY public.parque
 
 
 --
--- TOC entry 2968 (class 2606 OID 27076)
+-- TOC entry 2970 (class 2606 OID 27518)
 -- Name: participade participade_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1196,7 +1194,7 @@ ALTER TABLE ONLY public.participade
 
 
 --
--- TOC entry 2970 (class 2606 OID 27078)
+-- TOC entry 2972 (class 2606 OID 27520)
 -- Name: personal personal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1205,7 +1203,7 @@ ALTER TABLE ONLY public.personal
 
 
 --
--- TOC entry 2972 (class 2606 OID 27080)
+-- TOC entry 2974 (class 2606 OID 27522)
 -- Name: propuestadeexcursion propuestadeexcursion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1214,7 +1212,7 @@ ALTER TABLE ONLY public.propuestadeexcursion
 
 
 --
--- TOC entry 2974 (class 2606 OID 27082)
+-- TOC entry 2976 (class 2606 OID 27524)
 -- Name: propuestadias propuestadias_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1223,7 +1221,7 @@ ALTER TABLE ONLY public.propuestadias
 
 
 --
--- TOC entry 2976 (class 2606 OID 27084)
+-- TOC entry 2978 (class 2606 OID 27526)
 -- Name: propuestahoras propuestahoras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1232,7 +1230,7 @@ ALTER TABLE ONLY public.propuestahoras
 
 
 --
--- TOC entry 2978 (class 2606 OID 27086)
+-- TOC entry 2980 (class 2606 OID 27528)
 -- Name: provincia provincia_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1241,7 +1239,7 @@ ALTER TABLE ONLY public.provincia
 
 
 --
--- TOC entry 2980 (class 2606 OID 27088)
+-- TOC entry 2982 (class 2606 OID 27530)
 -- Name: proyecto proyecto_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1250,7 +1248,7 @@ ALTER TABLE ONLY public.proyecto
 
 
 --
--- TOC entry 2982 (class 2606 OID 27090)
+-- TOC entry 2984 (class 2606 OID 27532)
 -- Name: recorrido recorrido_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1259,7 +1257,7 @@ ALTER TABLE ONLY public.recorrido
 
 
 --
--- TOC entry 2984 (class 2606 OID 27092)
+-- TOC entry 2986 (class 2606 OID 27534)
 -- Name: registroelemento registroelemento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1268,7 +1266,7 @@ ALTER TABLE ONLY public.registroelemento
 
 
 --
--- TOC entry 2986 (class 2606 OID 27094)
+-- TOC entry 2988 (class 2606 OID 27536)
 -- Name: sealimentade sealimentade_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1277,7 +1275,7 @@ ALTER TABLE ONLY public.sealimentade
 
 
 --
--- TOC entry 2988 (class 2606 OID 27096)
+-- TOC entry 2990 (class 2606 OID 27538)
 -- Name: trabajaen trabajaen_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1286,7 +1284,7 @@ ALTER TABLE ONLY public.trabajaen
 
 
 --
--- TOC entry 2990 (class 2606 OID 27098)
+-- TOC entry 2992 (class 2606 OID 27540)
 -- Name: vegetal vegetal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1295,7 +1293,7 @@ ALTER TABLE ONLY public.vegetal
 
 
 --
--- TOC entry 2992 (class 2606 OID 27100)
+-- TOC entry 2994 (class 2606 OID 27542)
 -- Name: vehiculo vehiculo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1304,7 +1302,7 @@ ALTER TABLE ONLY public.vehiculo
 
 
 --
--- TOC entry 2994 (class 2606 OID 27102)
+-- TOC entry 2996 (class 2606 OID 27544)
 -- Name: visitante visitante_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1313,7 +1311,7 @@ ALTER TABLE ONLY public.visitante
 
 
 --
--- TOC entry 3157 (class 2618 OID 26995)
+-- TOC entry 3157 (class 2618 OID 27438)
 -- Name: provincia_cantparques _RETURN; Type: RULE; Schema: public; Owner: -
 --
 
@@ -1328,7 +1326,7 @@ CREATE OR REPLACE VIEW public.provincia_cantparques AS
 
 
 --
--- TOC entry 3035 (class 2620 OID 27103)
+-- TOC entry 3035 (class 2620 OID 27545)
 -- Name: registroelemento trigger_perdida_elemento; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1336,7 +1334,7 @@ CREATE TRIGGER trigger_perdida_elemento BEFORE DELETE ON public.registroelemento
 
 
 --
--- TOC entry 2997 (class 2606 OID 27104)
+-- TOC entry 2997 (class 2606 OID 27546)
 -- Name: alojamiento alojamiento_idparque_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1345,7 +1343,7 @@ ALTER TABLE ONLY public.alojamiento
 
 
 --
--- TOC entry 2998 (class 2606 OID 27109)
+-- TOC entry 2998 (class 2606 OID 27551)
 -- Name: animal animal_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1354,7 +1352,7 @@ ALTER TABLE ONLY public.animal
 
 
 --
--- TOC entry 2999 (class 2606 OID 27114)
+-- TOC entry 2999 (class 2606 OID 27556)
 -- Name: area area_idparque_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1363,7 +1361,7 @@ ALTER TABLE ONLY public.area
 
 
 --
--- TOC entry 3000 (class 2606 OID 27119)
+-- TOC entry 3000 (class 2606 OID 27561)
 -- Name: comestible comestible_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1372,7 +1370,7 @@ ALTER TABLE ONLY public.comestible
 
 
 --
--- TOC entry 3001 (class 2606 OID 27124)
+-- TOC entry 3001 (class 2606 OID 27566)
 -- Name: confloracion confloracion_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1381,7 +1379,7 @@ ALTER TABLE ONLY public.confloracion
 
 
 --
--- TOC entry 3002 (class 2606 OID 27129)
+-- TOC entry 3002 (class 2606 OID 27571)
 -- Name: conservacion conservacion_idarea_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1390,7 +1388,7 @@ ALTER TABLE ONLY public.conservacion
 
 
 --
--- TOC entry 3003 (class 2606 OID 27134)
+-- TOC entry 3003 (class 2606 OID 27576)
 -- Name: conservacion conservacion_idpersonal_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1399,7 +1397,7 @@ ALTER TABLE ONLY public.conservacion
 
 
 --
--- TOC entry 3004 (class 2606 OID 27139)
+-- TOC entry 3004 (class 2606 OID 27581)
 -- Name: contiene contiene_idparque_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1408,7 +1406,7 @@ ALTER TABLE ONLY public.contiene
 
 
 --
--- TOC entry 3005 (class 2606 OID 27144)
+-- TOC entry 3005 (class 2606 OID 27586)
 -- Name: contiene contiene_idprovincia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1417,7 +1415,7 @@ ALTER TABLE ONLY public.contiene
 
 
 --
--- TOC entry 3034 (class 2606 OID 27308)
+-- TOC entry 3006 (class 2606 OID 27591)
 -- Name: elementosperdidos elementosperdidos_idarea_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1426,7 +1424,7 @@ ALTER TABLE ONLY public.elementosperdidos
 
 
 --
--- TOC entry 3033 (class 2606 OID 27303)
+-- TOC entry 3007 (class 2606 OID 27596)
 -- Name: elementosperdidos elementosperdidos_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1435,7 +1433,7 @@ ALTER TABLE ONLY public.elementosperdidos
 
 
 --
--- TOC entry 3006 (class 2606 OID 27159)
+-- TOC entry 3008 (class 2606 OID 27601)
 -- Name: estadia estadia_idalojamiento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1444,7 +1442,7 @@ ALTER TABLE ONLY public.estadia
 
 
 --
--- TOC entry 3007 (class 2606 OID 27164)
+-- TOC entry 3009 (class 2606 OID 27606)
 -- Name: excursion excursion_idpropuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1453,7 +1451,7 @@ ALTER TABLE ONLY public.excursion
 
 
 --
--- TOC entry 3008 (class 2606 OID 27169)
+-- TOC entry 3010 (class 2606 OID 27611)
 -- Name: gestion gestion_idpersonal_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1462,7 +1460,7 @@ ALTER TABLE ONLY public.gestion
 
 
 --
--- TOC entry 3009 (class 2606 OID 27174)
+-- TOC entry 3011 (class 2606 OID 27616)
 -- Name: investiga investiga_idinvestigador_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1471,7 +1469,7 @@ ALTER TABLE ONLY public.investiga
 
 
 --
--- TOC entry 3010 (class 2606 OID 27179)
+-- TOC entry 3012 (class 2606 OID 27621)
 -- Name: investiga investiga_idproyecto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1480,7 +1478,7 @@ ALTER TABLE ONLY public.investiga
 
 
 --
--- TOC entry 3011 (class 2606 OID 27184)
+-- TOC entry 3013 (class 2606 OID 27626)
 -- Name: investigador investigador_idpersonal_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1489,7 +1487,7 @@ ALTER TABLE ONLY public.investigador
 
 
 --
--- TOC entry 3012 (class 2606 OID 27189)
+-- TOC entry 3014 (class 2606 OID 27631)
 -- Name: mineral mineral_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1498,7 +1496,7 @@ ALTER TABLE ONLY public.mineral
 
 
 --
--- TOC entry 3013 (class 2606 OID 27194)
+-- TOC entry 3015 (class 2606 OID 27636)
 -- Name: ocupadopor ocupado_idalojamiento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1507,7 +1505,7 @@ ALTER TABLE ONLY public.ocupadopor
 
 
 --
--- TOC entry 3014 (class 2606 OID 27199)
+-- TOC entry 3016 (class 2606 OID 27641)
 -- Name: ocupadopor ocupado_idvisitante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1516,7 +1514,7 @@ ALTER TABLE ONLY public.ocupadopor
 
 
 --
--- TOC entry 3015 (class 2606 OID 27204)
+-- TOC entry 3017 (class 2606 OID 27646)
 -- Name: ofrece ofrece_idalojamiento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1525,7 +1523,7 @@ ALTER TABLE ONLY public.ofrece
 
 
 --
--- TOC entry 3016 (class 2606 OID 27209)
+-- TOC entry 3018 (class 2606 OID 27651)
 -- Name: ofrece ofrece_idpropuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1534,7 +1532,7 @@ ALTER TABLE ONLY public.ofrece
 
 
 --
--- TOC entry 3017 (class 2606 OID 27214)
+-- TOC entry 3019 (class 2606 OID 27656)
 -- Name: participade participade_idpropuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1543,7 +1541,7 @@ ALTER TABLE ONLY public.participade
 
 
 --
--- TOC entry 3018 (class 2606 OID 27219)
+-- TOC entry 3020 (class 2606 OID 27661)
 -- Name: participade participade_idvisitante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1552,7 +1550,7 @@ ALTER TABLE ONLY public.participade
 
 
 --
--- TOC entry 3019 (class 2606 OID 27224)
+-- TOC entry 3021 (class 2606 OID 27666)
 -- Name: propuestadias propuestadias_idpropuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1561,7 +1559,7 @@ ALTER TABLE ONLY public.propuestadias
 
 
 --
--- TOC entry 3020 (class 2606 OID 27229)
+-- TOC entry 3022 (class 2606 OID 27671)
 -- Name: propuestahoras propuestahoras_idpropuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1570,7 +1568,7 @@ ALTER TABLE ONLY public.propuestahoras
 
 
 --
--- TOC entry 3021 (class 2606 OID 27234)
+-- TOC entry 3023 (class 2606 OID 27676)
 -- Name: provincia provincia_idorganismo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1579,7 +1577,7 @@ ALTER TABLE ONLY public.provincia
 
 
 --
--- TOC entry 3022 (class 2606 OID 27239)
+-- TOC entry 3024 (class 2606 OID 27681)
 -- Name: proyecto proyecto_idelementonatural_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1588,7 +1586,7 @@ ALTER TABLE ONLY public.proyecto
 
 
 --
--- TOC entry 3023 (class 2606 OID 27244)
+-- TOC entry 3025 (class 2606 OID 27686)
 -- Name: recorrido recorrido_idarea_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1597,7 +1595,7 @@ ALTER TABLE ONLY public.recorrido
 
 
 --
--- TOC entry 3024 (class 2606 OID 27249)
+-- TOC entry 3026 (class 2606 OID 27691)
 -- Name: recorrido recorrido_idpersonalvigilancia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1606,7 +1604,7 @@ ALTER TABLE ONLY public.recorrido
 
 
 --
--- TOC entry 3025 (class 2606 OID 27254)
+-- TOC entry 3027 (class 2606 OID 27696)
 -- Name: recorrido recorrido_matriculavehiculo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1615,7 +1613,7 @@ ALTER TABLE ONLY public.recorrido
 
 
 --
--- TOC entry 3026 (class 2606 OID 27259)
+-- TOC entry 3028 (class 2606 OID 27701)
 -- Name: registroelemento registroelemento_idarea_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1624,7 +1622,7 @@ ALTER TABLE ONLY public.registroelemento
 
 
 --
--- TOC entry 3027 (class 2606 OID 27264)
+-- TOC entry 3029 (class 2606 OID 27706)
 -- Name: registroelemento registroelemento_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1633,7 +1631,7 @@ ALTER TABLE ONLY public.registroelemento
 
 
 --
--- TOC entry 3028 (class 2606 OID 27269)
+-- TOC entry 3030 (class 2606 OID 27711)
 -- Name: sealimentade sealimentade_iddepredador_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1642,7 +1640,7 @@ ALTER TABLE ONLY public.sealimentade
 
 
 --
--- TOC entry 3029 (class 2606 OID 27274)
+-- TOC entry 3031 (class 2606 OID 27716)
 -- Name: sealimentade sealimentade_idpresa_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1651,7 +1649,7 @@ ALTER TABLE ONLY public.sealimentade
 
 
 --
--- TOC entry 3030 (class 2606 OID 27279)
+-- TOC entry 3032 (class 2606 OID 27721)
 -- Name: trabajaen trabajaen_idparque_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1660,7 +1658,7 @@ ALTER TABLE ONLY public.trabajaen
 
 
 --
--- TOC entry 3031 (class 2606 OID 27284)
+-- TOC entry 3033 (class 2606 OID 27726)
 -- Name: trabajaen trabajaen_idpersonal_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1669,7 +1667,7 @@ ALTER TABLE ONLY public.trabajaen
 
 
 --
--- TOC entry 3032 (class 2606 OID 27289)
+-- TOC entry 3034 (class 2606 OID 27731)
 -- Name: vegetal vegetal_idelemento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1677,7 +1675,7 @@ ALTER TABLE ONLY public.vegetal
     ADD CONSTRAINT vegetal_idelemento_fkey FOREIGN KEY (idelemento) REFERENCES public.comestible(idelemento);
 
 
--- Completed on 2019-06-06 15:35:46 -03
+-- Completed on 2019-06-07 00:02:59 -03
 
 --
 -- PostgreSQL database dump complete

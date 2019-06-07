@@ -11,17 +11,10 @@ CREATE TABLE ElementosPerdidos (
 
 CREATE OR REPLACE FUNCTION perdida_elemento() RETURNS TRIGGER AS $$
 DECLARE
-  IdRegistroElemento INTEGER;
-  IdElemento INTEGER;
-  IdArea INTEGER;
   IdPerdida INTEGER;
 BEGIN
-  IdRegistroElemento := OLD.IdRegistroElemento;
-  IdElemento := OLD.IdElemento;
-  IdArea := OLD.IdArea;
-  
   INSERT INTO ElementosPerdidos(IdRegistroElemento, IdElemento, IdArea) 
-  VALUES (IdRegistroElemento, IdElemento, IdArea)
+  VALUES (OLD.IdRegistroElemento, OLD.IdElemento, OLD.IdArea)
   RETURNING ElementosPerdidos.IdPerdida INTO IdPerdida;
   
   perform pg_notify('perdida_elemento', IdPerdida::TEXT);

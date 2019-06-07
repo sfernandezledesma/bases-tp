@@ -26,7 +26,7 @@ DB_NAME=os.getenv("DB_NAME")
 DB_HOST=os.getenv("DB_HOST")
 DB_USER=os.getenv("DB_USER")
 DB_PASSWORD=os.getenv("DB_PASSWORD")
-EMAIL_SENDER="sender@gmail.com"
+EMAIL_SENDER="admin@gmail.com"
 EMAIL_RECEIVER="receiver@hotmail.com"
 
 dbc = psycopg2.connect(database=DB_NAME, host=DB_HOST, user=DB_USER, password=DB_PASSWORD)
@@ -37,7 +37,12 @@ def mostrar_y_enviar_email(row):
   IdRegistroElemento = row[0]
   nombreCientifico = row[1]
   IdPerdida = row[2]
-  msg = "Se perdio un especimen de la siguiente especie: %s (id=%s)" % (nombreCientifico, IdRegistroElemento)
+  EmailContacto = row[3]
+  msg = """From: Admin <%s>
+To: Contacto Parque <%s>
+Subject: Notificacion Perdida Especimen
+  
+Se perdio un especimen de la siguiente especie: %s (id=%s)""" % (EMAIL_SENDER, EmailContacto, nombreCientifico, IdRegistroElemento)
   print(msg)
   server = smtplib.SMTP("localhost", PORT)
   server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, "\n" + msg)
@@ -45,7 +50,7 @@ def mostrar_y_enviar_email(row):
   cur.execute("UPDATE ElementosPerdidos SET EmailEnviado=TRUE WHERE IdPerdida=%s;", [IdPerdida])
 
 cur.execute("LISTEN perdida_elemento;")
-cur.execute("SELECT IdRegistroElemento, nombreCientifico, IdPerdida FROM ElementosPerdidos NATURAL JOIN ElementoNatural WHERE NOT EmailEnviado;")
+cur.execute("SELECT IdRegistroElemento, nombreCientifico, IdPerdida, EmailContacto FROM ElementosPerdidos NATURAL JOIN ElementoNatural NATURAL JOIN Area JOIN Parque ON Area.IdParque=Parque.IdParque WHERE NOT EmailEnviado;")
 results = cur.fetchall()
 for row in results:
   mostrar_y_enviar_email(row)
@@ -55,6 +60,6 @@ while 1:
     dbc.poll()
     while dbc.notifies:
       notify = dbc.notifies.pop()
-      cur.execute("SELECT IdRegistroElemento, nombreCientifico, IdPerdida FROM ElementosPerdidos NATURAL JOIN ElementoNatural WHERE IdPerdida = %s;", [notify.payload])
+      cur.execute("SELECT IdRegistroElemento, nombreCientifico, IdPerdida, EmailContacto FROM ElementosPerdidos NATURAL JOIN ElementoNatural NATURAL JOIN Area JOIN Parque ON Area.IdParque=Parque.IdParque WHERE IdPerdida = %s;", [notify.payload])
       row = cur.fetchone()
       mostrar_y_enviar_email(row)
